@@ -1,6 +1,6 @@
 # Metadata Schema Design
 
-## How it's laid out
+## How i structured it
 
 The keys are ordered the way someone would ask questions: analysis = what is this, generation = how was it made, files = what do I load, weights = which column do I use, observables = what units, event_selection = what cuts were applied.
 
