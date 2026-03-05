@@ -30,18 +30,18 @@ files:
       n_bootstrap_replicas: 25
 
     - filename: "multifold_nonDY.h5"
-      description: "Adds EW Zjj/VBF + diboson — sample composition systematic"
+      description: "Adds EW Zjj/VBF + diboson  sample composition systematic"
       n_events: 433397
       n_bootstrap_replicas: 0
 
 weights:
   recommended: "weights_nominal"
-  normalization: "Dimensionless, sums to ~1810 per file. Not a physical cross-section."
+  normalization: "Dimensionless"
   columns:
     weight_mc: "Raw MC generator weight"
-    weights_nominal: "Mean of all ensemble members — use this for plots"
-    weights_dd: "Single classifier pass before ensembling (debug)"
-    weights_ensemble_N: "Individual ensemble member N (0-indexed), nominal only"
+    weights_nominal: "Mean of all ensemble members use this for plots"
+    weights_dd: "Single classifier pass before ensembling"
+    weights_ensemble_N: "Individual ensemble member N, nominal only"
     weights_bootstrap_mc_N: "Bootstrap replica N for stat. uncertainty estimation"
   n_bootstrap_replicas:
     multifold.h5: 50
