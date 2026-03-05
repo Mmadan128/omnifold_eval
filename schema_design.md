@@ -22,8 +22,8 @@ Provenance fields left as null, keeping them there makes the schema a checklist.
 
 ## What I dropped and why
 
-Neural net hyperparameters (architecture, learning rate, epochs) belong in a training config or a paper appendix, not a result file.
+The hyperparameters should be in the training config,not the result file.
 
-Per-event uncertainty estimates are already in the bootstrap replicas in the data files, no need to duplicate.
+Per event uncertainty estimates are already in the bootstrap replicas in the data files, no need to duplicate.
 
-Binning scheme is the user's call. Encoding it here would lock the schema to one specific analysis.
+Binning scheme is the user's choice. Encoding it here would lock the schema to one specific analysis.
