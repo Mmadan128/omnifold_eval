@@ -27,13 +27,3 @@ Neural net hyperparameters (architecture, learning rate, epochs) belong in a tra
 Per-event uncertainty estimates are already in the bootstrap replicas in the data files, no need to duplicate.
 
 Binning scheme is the user's call. Encoding it here would lock the schema to one specific analysis.
-
-## How to use this file
-
-1. Check analysis to confirm this is the measurement you want.
-2. Grab files.nominal.filename, load it with pd.read_hdf(filename, key="df").
-3. Use weights.recommended as your per-event weight column, that's it for a basic plot.
-4. For systematics, repeat with the files under files.systematics and compare.
-5. For stat. uncertainty, loop over weights_bootstrap_mc_0..N (N from n_bootstrap_replicas) and take std across the histograms.
-6. Read event_selection.note before applying weights to any new MC sample.
-
