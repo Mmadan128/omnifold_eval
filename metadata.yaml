@@ -1,7 +1,7 @@
 schema_version: "1.0"
 
 analysis:
-  name: "OmniFold unfolding — dilepton + track-jets"
+  name: "OmniFold unfolding "
   process: "pp -> Z/gamma* + jets -> ll + jets"
   center_of_mass_energy_TeV: 13
   experiment: "ATLAS (pseudo-data)"
