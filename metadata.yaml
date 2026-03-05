@@ -1,0 +1,59 @@
+schema_version: "1.0"
+
+analysis:
+  name: "OmniFold unfolding — dilepton + track-jets"
+  process: "pp -> Z/gamma* + jets -> ll + jets"
+  center_of_mass_energy_TeV: 13
+  experiment: "ATLAS (pseudo-data)"
+  luminosity_ifb: null
+  reference: null
+
+generation:
+  algorithm: "OmniFold"
+  algorithm_version: null
+  nominal_generator: "MadGraph5_aMC@NLO"
+  pdf_set: null
+  tune: null
+
+files:
+  nominal:
+    filename: "multifold.h5"
+    n_events: 418014
+    n_ensemble_members: 100
+    n_bootstrap_replicas: 50
+
+  systematics:
+    - filename: "multifold_sherpa.h5"
+      generator: "Sherpa"
+      description: "Alternative parton shower/hadronization — generator systematic"
+      n_events: 326430
+      n_bootstrap_replicas: 25
+
+    - filename: "multifold_nonDY.h5"
+      description: "Adds EW Zjj/VBF + diboson — sample composition systematic"
+      n_events: 433397
+      n_bootstrap_replicas: 0
+
+weights:
+  recommended: "weights_nominal"
+  normalization: "Dimensionless, sums to ~1810 per file. Not a physical cross-section."
+  columns:
+    weight_mc: "Raw MC generator weight"
+    weights_nominal: "Mean of all ensemble members — use this for plots"
+    weights_dd: "Single classifier pass before ensembling (debug)"
+    weights_ensemble_N: "Individual ensemble member N (0-indexed), nominal only"
+    weights_bootstrap_mc_N: "Bootstrap replica N for stat. uncertainty estimation"
+  n_bootstrap_replicas:
+    multifold.h5: 50
+    multifold_sherpa.h5: 25
+    multifold_nonDY.h5: 0
+
+observables:
+  units: "GeV for pT/mass, rad for angles, dimensionless for eta/y/tau/Ntracks"
+  lepton: [pT_ll, pT_l1, pT_l2, eta_l1, eta_l2, phi_l1, phi_l2, y_ll]
+  track_jet_1: [pT_trackj1, y_trackj1, phi_trackj1, m_trackj1, tau1_trackj1, tau2_trackj1, tau3_trackj1, Ntracks_trackj1]
+  track_jet_2: [pT_trackj2, y_trackj2, phi_trackj2, m_trackj2, tau1_trackj2, tau2_trackj2, tau3_trackj2, Ntracks_trackj2]
+  internal: {target_dd: "Classifier score, diagnostic only — not a physics observable"}
+
+event_selection:
+  note: "Not stored. Make sure any new MC sample passes the same lepton pT/eta, jet, and track cuts before applying these weights."
