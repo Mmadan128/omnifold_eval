@@ -8,7 +8,6 @@ weight_mc is the raw weight the generator gave each event. OmniFold then trains 
 
 The 24 observables are lepton kinematics (pT_ll, pT_l1/l2, eta_l1/l2, phi_l1/l2, y_ll) and track-jet variables for two jets (pT, y, phi, m, tau1/2/3, Ntracks). All kinematic floats are float32, track counts are int32.
 
-There's also target_dd in the nominal file, looks like the classifier output score kept around for debugging. Not something you'd plot.
 
 ## What's missing?
 
