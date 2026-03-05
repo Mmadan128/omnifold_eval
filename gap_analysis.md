@@ -22,11 +22,11 @@ No generator info: no MadGraph5 version, no Sherpa version, no PDF set, no tune.
 
 ## Why standardizing this is hard
 
-HDF5 is fine here, but most HEP software expects ROOT TTrees. Any standard has to either pick a format or ship converters.
+HDF5 is used here, but most HEP software expects ROOT format. Any standard has to either pick a format or ship converters.
 
 Column naming drifts even within one experiment, and getting four major collaborations to agree on canonical names is genuinely painful.
 
-Different analyses define "weight" differently: raw generator weight, normalized, ratio-to-nominal, product of several corrections. A standard needs to say exactly what you're supposed to multiply together.
+Different analyses define weight differently: raw generator weight, normalized, ratio to nominal, product of several corrections. A standard needs to say exactly what you're supposed to multiply together.
 
 This dataset itself shows the bootstrap inconsistency problem. Once files with 0 replicas exist in the wild, any script that loops over bootstrap columns silently breaks on them.
 
