@@ -18,7 +18,7 @@ def weighted_histogram(
     ax: Optional[plt.Axes] = None,
     color: str = "steelblue",
 ) -> dict[str, np.ndarray]:
-    """Compute a weighted histogram and optionally plot it. Returns counts, edges, bin_centres, bin_widths."""
+    """Compute a weighted histogram and plots it"""
     values = np.asarray(values, dtype=float)
 
     if values.ndim != 1:
@@ -79,7 +79,6 @@ def weighted_histogram(
 
 
 # Tests
-
 # Edge cases tested: a zero weight event should disappear from the histogram,
 #Negative weights are useless for our data analysis and they corrupt normalization.
 # Mismatched array lengths would disrupt our pipeline when we insert new real data.
