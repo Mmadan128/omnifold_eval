@@ -2,7 +2,7 @@
 
 ## How i structured it
 
-The keys are ordered the way someone would ask questions: analysis = what is this, generation = how was it made, files = what do I load, weights = which column do I use, observables = what units, event_selection = what cuts were applied.
+The keys are ordered in a simple qna way like analysis = what is this, generation = how was it made, files = what do I load, weights = which column do I use, observables = what units, event_selection = what cuts were applied.
 
 files separates nominal from systematics so if you just want to make a quick plot you only need to look at one place. Systematics are a list, so adding more variations later is just appending an entry.
 
