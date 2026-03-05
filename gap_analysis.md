@@ -11,7 +11,7 @@ The 24 observables are lepton kinematics (pT_ll, pT_l1/l2, eta_l1/l2, phi_l1/l2,
 
 ## What's missing?
 
-No units. pT_* 
+No units in pT_* 
 
 No event selection. 
 There's no record of what cuts were applied before running OmniFold: lepton pT/eta thresholds, jet algorithm, track pT floor, overlap removal. If we apply these weights to a new MC sample that used different cuts, the result will be wrong in a subtle way.
