@@ -7,7 +7,7 @@
 **Timezone:** India/UTC+5:30, Indian Standard Time  
 **Degree:** Bachelor of Technology in CST, 2028  
 **Primary Languages:** English and Hindi  
-**Social Handle:** [LinkedIn](https://linkedin.com/in/mohitmadan128) | [GitHub](https://github.com/Mmadan128)  
+**Social Handle:** [LinkedIn](https://www.linkedin.com/in/mohit-madan-b8447a313/) | [GitHub](https://github.com/Mmadan128)  
 **Evaluation Task:** [Mmadan128/omnifold_eval](https://github.com/Mmadan128/omnifold_eval)
 
 ---
