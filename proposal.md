@@ -33,7 +33,7 @@
 ### 1. Overview
 
 #### 1.1 Project Synopsis
-In my evaluation task, I inspected the three pseudodata files and found practical reuse issues: missing metadata, inconsistent bootstrap columns, and unclear normalization. For example, the nominal file has 50 bootstrap replicas, Sherpa has 25, and nonDY has 0, so a naive loop over `weights_bootstrap_mc_N` can fail unless this difference is declared up front. This proposal turns those observations into a concrete implementation plan: a strict metadata schema, a predictable HDF5 layout, and a Python API for reading, writing, and validation. The target outcome is OmniFold outputs that another analyst can use immediately without reverse-engineering internals.
+In my evaluation task, I inspected the three pseudodata files and found practical reuse issues: missing metadata, inconsistent bootstrap columns, and unclear normalization. Bootstrap counts are not uniform across files, so a naive loop over `weights_bootstrap_mc_N` can fail unless this is declared up front. This proposal turns those observations into a concrete implementation plan: a strict metadata schema, a predictable HDF5 layout, and a Python API for reading, writing, and validation. The target outcome is OmniFold outputs that another analyst can use immediately without reverse-engineering internals.
 
 #### 1.2 State of the Art and Background
 OmniFold outputs per-event weights instead of fixed binned histograms, which is useful for reinterpretation and post-publication studies. The current gap is publication, not training: there is no shared standard for storing these weights, documenting their meaning, and exposing them through tooling. In practice, arrays such as `weights_nominal` and `weight_mc` are often shared without machine-readable context (units, selections, normalization, and systematic conventions). Without that context, downstream users cannot safely automate checks or integrate results into HEPData workflows.
@@ -44,13 +44,13 @@ I will first lock down metadata requirements using a JSON Schema that enforces u
 #### 1.4 Identified Gaps
 The full technical details are documented in my evaluation deliverables. The main blockers for reuse are:
 
-1. **Silent Failures on Missing Bootstrap Replicas** The nominal file contains 50 replicas, Sherpa contains 25, and nonDY contains 0. A standard analysis loop attempting to calculate statistical uncertainties will throw a KeyError or silently drop events when iterating over the nonDY file. The schema must enforce an explicit n_bootstrap_replicas integer field so the API knows the exact array bounds before loading data into memory.
+1. **Silent Failures on Missing Bootstrap Replicas** The three files contain different numbers of bootstrap replicas, including one file with none. A standard analysis loop can throw a KeyError or silently drop events if this is not handled explicitly. The schema must enforce an explicit n_bootstrap_replicas field so the API knows array bounds before loading data into memory.
 
-2. **Unexplained Normalization Weights** The weights in all three files sum to ~1810.0, but there is no record indicating whether this corresponds to integrated luminosity, cross-section scaling, or an internal normalization convention. Calling `np.histogram(..., weights=...)` without this context yields ambiguous integrals. The standard should require explicit normalization metadata, including a declared convention and `sum_of_weights`.
+2. **Unexplained Normalization Weights** The weights in all three files have a shared normalization behavior, but there is no record of what convention that represents. Calling `np.histogram(..., weights=...)` without this context yields ambiguous integrals. The standard should require explicit normalization metadata, including a declared convention and `sum_of_weights`.
 
-3. **Missing Event Selection Cuts** The HDF5 files contain no record of the generator-level cuts (e.g., $p_T > 25$ GeV, $|\eta| < 2.5$) or jet algorithms applied prior to running OmniFold. If a user applies these weights to a new Monte Carlo sample generated with different baseline cuts, the physics will be incorrect even if the script runs. Event selection cuts must be a mandatory metadata block.
+3. **Missing Event Selection Cuts** The HDF5 files contain no record of the generator-level cuts or jet algorithms applied before running OmniFold. If a user applies these weights to a new Monte Carlo sample with different baseline cuts, the physics will be incorrect even if the script runs. Event selection cuts must be a mandatory metadata block.
 
-4. **Missing Units for Physics Variables** The 24 observable columns lack unit labels. Passing an array of GeV values to a script expecting MeV introduces an invisible $10^6$ error. Additionally, complex variables like N-subjettiness ($\tau_{1,2,3}$) are missing the $\beta$ parameter. The schema must enforce strict units and parameters fields for every declared observable.
+4. **Missing Units for Physics Variables** The observable columns lack unit labels. Passing values with the wrong unit silently corrupts results. Also, complex variables such as N-subjettiness are missing parameter metadata. The schema must enforce strict units and parameter fields for every declared observable.
 
 ---
 
@@ -59,10 +59,10 @@ The full technical details are documented in my evaluation deliverables. The mai
 
 #### 2.1 Strict JSON Metadata Schema
 I will formalize the evaluation YAML draft into a JSON Schema so files can be validated before they are saved or published.
-- **Enforcing Data Types:** Require explicit strings for units (e.g., ["GeV", "MeV", "rad", "dimensionless"]) so they cannot be left blank.
+- **Enforcing Data Types:** Require explicit strings for units so they cannot be left blank.
 - **Consistent Naming:** Standardize the naming for systematic variations (using regex like ^weight_syst_[a-zA-Z0-9]+_(up|dn)$) to prevent column names from drifting between different experiments.
 - **Mandatory Physics Context:** Make generator details (MadGraph/Sherpa version) and event selection cuts mandatory, throwing a ValidationError if a user attempts to save a file without them.
-- **Iteration Structure:** Add explicit fields for OmniFold iteration information (for example step 1 and step 2 outputs), so users can understand what stage each weight came from.
+- **Iteration Structure:** Add explicit fields for OmniFold iteration information so users can understand what stage each weight came from.
 
 #### 2.2 Standardized HDF5 Container Format
 I will define a structured HDF5 layout optimized for fast I/O and cross-compatibility.
